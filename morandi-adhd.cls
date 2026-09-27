@@ -38,7 +38,9 @@
 %% 套件 Packages
 %% ---------------------------------------------------------------------
 \RequirePackage{fontspec}
-\RequirePackage[slantfont,boldfont]{xeCJK}
+% 注意：不使用 xeCJK 的 boldfont 選項（全域偽粗體）。偽粗體是把筆畫往外加粗，
+% 字會擠在一起、和一般字對不齊；這裡改用字型本身的真粗體（見「字型」段落）。
+\RequirePackage[slantfont]{xeCJK}
 \RequirePackage{xeCJKfntef}
 \RequirePackage{amsmath,amssymb}
 \RequirePackage{xcolor}
@@ -125,13 +127,33 @@
 \morandi@pickfont{\setmonofont}
   {JetBrains Mono,Fira Code,Source Code Pro,Menlo,Consolas,DejaVu Sans Mono}
   {\setmonofont{Latin Modern Mono}}
-\morandi@pickfont{\setCJKmainfont}
+% 中文字型：優先使用字型內建的真粗體，字寬、基線都和一般字一致。
+%   * 有 Bold 字重的字型（Noto／思源／微軟正黑）交給 fontspec 自動找
+%   * 蘋方沒有 Bold，改用 Semibold
+%   * 只有單一字重的字型才退回偽粗體
+\newcommand\morandi@setcjkboldopts[1]{% 結果存在 \morandi@opts
+  \edef\morandi@tmp{#1}\def\morandi@pf{PingFang TC}\def\morandi@ht{Heiti TC}%
+  \def\morandi@opts{}%
+  \ifx\morandi@tmp\morandi@pf \def\morandi@opts{BoldFont={PingFang TC Semibold}}\fi
+  \ifx\morandi@tmp\morandi@ht \def\morandi@opts{AutoFakeBold=2.5}\fi}
+\newcommand\morandi@pickcjk[3]{% #1 = 設定指令, #2 = 候選清單, #3 = 最後備案
+  \def\morandi@found{0}%
+  \@for\morandi@f:=#2\do{%
+    \if0\morandi@found
+      \IfFontExistsTF{\morandi@f}{%
+        \morandi@setcjkboldopts{\morandi@f}%
+        \edef\morandi@next{\noexpand#1{\morandi@f}[\morandi@opts]}%
+        \morandi@next\def\morandi@found{1}}{}%
+    \fi}%
+  \if0\morandi@found #3\fi}
+
+\morandi@pickcjk{\setCJKmainfont}
   {Noto Sans CJK TC,Noto Sans TC,Source Han Sans TC,PingFang TC,Microsoft JhengHei,Heiti TC}
   {\ClassWarningNoLine{morandi-adhd}{找不到繁體中文黑體，請自行設定 \string\setCJKmainfont}}
-\morandi@pickfont{\setCJKsansfont}
+\morandi@pickcjk{\setCJKsansfont}
   {Noto Sans CJK TC,Noto Sans TC,Source Han Sans TC,PingFang TC,Microsoft JhengHei,Heiti TC}
   {}
-\morandi@pickfont{\setCJKmonofont}
+\morandi@pickcjk{\setCJKmonofont}
   {Noto Sans Mono CJK TC,Noto Sans CJK TC,Noto Sans TC,PingFang TC,Microsoft JhengHei}
   {}
 
