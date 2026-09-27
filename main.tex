@@ -82,8 +82,31 @@
 \end{warning}
 
 \begin{question}
-  你讀完這一節，還記得「綠色方塊」代表什麼嗎？
+  你讀完這一節，還記得「綠色邊線的方塊」代表什麼嗎？
 \end{question}
+
+\subsection{講義常用方塊}
+
+\begin{bigidea}
+  整章只記一件事的話，就記這個框裡的內容。
+\end{bigidea}
+
+\begin{terms}
+  \key{莫蘭迪色}：加入灰色、飽和度低的顏色。\\
+  \key{色盤}：一組固定搭配使用的顏色，定義在 \texttt{morandi.sty}。
+\end{terms}
+
+\begin{derivation}[面積公式]
+  長方形面積 $= \text{長} \times \text{寬}$，三角形是同底同高長方形的一半，所以
+  $A = \tfrac{1}{2}bh$。
+\end{derivation}
+
+\begin{selfcheck}
+  \begin{checklist}
+    \item 我能說出重點框和定義框的差別
+    \item 我知道答案字母用 \verb|\answer{B}| 標示，例如：答案 \answer{B}
+  \end{checklist}
+\end{selfcheck}
 
 \subsection{表格}
 
@@ -91,14 +114,16 @@
   \zebra
   \begin{tabular}{lll}
     \toprule
-    \headerrow \textbf{環境} & \textbf{顏色} & \textbf{用途} \\
+    \headerrow \headcell{環境} & \headcell{顏色} & \headcell{用途} \\
     \midrule
-    \texttt{keypoint}   & 灰玫瑰   & 重點     \\
-    \texttt{definition} & 霧霾藍   & 定義     \\
-    \texttt{example}    & 鼠尾草綠 & 範例     \\
-    \texttt{tip}        & 奶茶沙   & 小提示   \\
-    \texttt{warning}    & 陶土紅   & 注意     \\
-    \texttt{question}   & 灰紫     & 想一想   \\
+    \texttt{keypoint}   & 鼠尾草綠 mdSage & 重點     \\
+    \texttt{definition} & 乾燥玫瑰 mdTerm & 定義     \\
+    \texttt{example}    & 灰藍 mdBlue     & 例題     \\
+    \texttt{goals}      & 霧藍灰 mdDeep   & 本節目標 \\
+    \texttt{tip}        & 奶茶 mdSand     & 小提示   \\
+    \texttt{warning}    & 淺玫瑰 mdRose   & 注意     \\
+    \texttt{question}   & 暖灰 mdMuted    & 想一想   \\
+    \texttt{terms}   & 奶茶 mdSand     & 名詞     \\
     \bottomrule
   \end{tabular}
 \end{center}

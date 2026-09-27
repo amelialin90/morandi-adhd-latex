@@ -1,0 +1,41 @@
+%% =====================================================================
+%%  morandi.sty — 莫蘭迪 12 色色盤
+%%
+%%  講義、讀本、英文版、試卷共用同一組顏色。morandi-adhd.cls 會自動載入；
+%%  其他文件也可以單獨使用：\usepackage{morandi}
+%%
+%%  名稱       色碼      色調      用途
+%%  mdDeep    #4F5D6B  霧藍灰    大標題、章名；英文版粗體字首
+%%  mdBlue    #7D8FA3  灰藍      次標題、連結、頁碼、例題框
+%%  mdTerm    #9B6B67  乾燥玫瑰  專有名詞、定義框邊線、答案字母
+%%  mdRose    #C9A9A6  淺玫瑰    節號色塊、推導框標題、封面左邊線
+%%  mdSage    #9AAA8F  鼠尾草綠  重點框邊線、項目符號、Big idea 框
+%%  mdSand    #E8E1D5  奶茶      名詞框底色、自我檢查框標題
+%%  mdCream   #F7F4EF  米白      封面框、重點框、定義框的底色
+%%  mdRow     #F3EFE9  淺米      表格隔行底色
+%%  mdHeadBg  #8C9AA6  藍灰      表格表頭底色（配白字）
+%%  mdLine    #C9C0B4  灰褐      分隔線、表格線、頁首線
+%%  mdMuted   #8A8580  暖灰      次要文字、圖說、中文定義行
+%%  mdText    #3E4145  深炭灰    內文文字
+%%
+%%  授權：MIT License
+%% =====================================================================
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{morandi}[2026/09/27 v1.0 Morandi 12-colour palette]
+
+\RequirePackage{xcolor}
+
+\definecolor{mdDeep}  {HTML}{4F5D6B}
+\definecolor{mdBlue}  {HTML}{7D8FA3}
+\definecolor{mdTerm}  {HTML}{9B6B67}
+\definecolor{mdRose}  {HTML}{C9A9A6}
+\definecolor{mdSage}  {HTML}{9AAA8F}
+\definecolor{mdSand}  {HTML}{E8E1D5}
+\definecolor{mdCream} {HTML}{F7F4EF}
+\definecolor{mdRow}   {HTML}{F3EFE9}
+\definecolor{mdHeadBg}{HTML}{8C9AA6}
+\definecolor{mdLine}  {HTML}{C9C0B4}
+\definecolor{mdMuted} {HTML}{8A8580}
+\definecolor{mdText}  {HTML}{3E4145}
+
+\endinput
