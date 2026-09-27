@@ -80,8 +80,8 @@
   \definecolor{BoxBgMix} {HTML}{2E3136}
   \def\morandi@boxmix{22}
 \else
-  % 淺色模式：暖米色底、深灰字（比純白底更不刺眼）
-  \definecolor{PageBg}   {HTML}{F6F2EC}
+  % 淺色模式：偏白的暖白底、深灰字（比純白底柔和，又比米色更清爽）
+  \definecolor{PageBg}   {HTML}{FBFAF7}
   \definecolor{TextMain} {HTML}{3F3B38}
   \definecolor{TextSoft} {HTML}{7A736C}
   \definecolor{Heading}  {HTML}{6E5A57}
@@ -336,7 +336,8 @@
 %%   \key{...}   關鍵字（粗體 + 顏色）
 %%   \hl{...}    螢光筆標記（可跨行）
 %%   \soft{...}  次要資訊（淡色），讓主要內容更突出
-%%   \bionic{...} 英文「仿生閱讀」：每個單字前半粗體，引導視線
+%%   \bionic{...} 英文閱讀引導：每三個單字，第一個單字的前兩個字母加粗
+%%                 （可用 \bionicsetup{every=3, letters=2} 調整）
 %% ---------------------------------------------------------------------
 \newcommand\key[1]{{\bfseries\color{MorandiClay!85!TextMain}#1}}
 \newcommand\soft[1]{{\color{TextSoft}\small #1}}
@@ -350,33 +351,44 @@
 
 \ExplSyntaxOn
 \seq_new:N \l__morandi_words_seq
-\tl_new:N  \l__morandi_word_tl
-\int_new:N \l__morandi_len_int
-\int_new:N \l__morandi_cut_int
-\bool_new:N \l__morandi_first_bool
+\int_new:N \l__morandi_index_int
+\int_new:N \l__morandi_every_int
+\int_new:N \l__morandi_letters_int
+\int_set:Nn \l__morandi_every_int   { 3 }
+\int_set:Nn \l__morandi_letters_int { 2 }
+
+% \bionicsetup{every=3, letters=2}
+%   every   ：每幾個單字加粗一次（1 = 每個單字都加粗）
+%   letters ：加粗單字的前幾個字母
+\keys_define:nn { morandi / bionic }
+  {
+    every   .int_set:N = \l__morandi_every_int ,
+    letters .int_set:N = \l__morandi_letters_int ,
+  }
+\NewDocumentCommand \bionicsetup { m } { \keys_set:nn { morandi / bionic } {#1} }
 
 \cs_new_protected:Npn \__morandi_bionic_word:n #1
   {
-    \int_set:Nn \l__morandi_len_int { \tl_count:n {#1} }
-    \int_compare:nNnTF \l__morandi_len_int < 4
-      { \int_set:Nn \l__morandi_cut_int { 1 } }
-      { \int_set:Nn \l__morandi_cut_int { \int_div_round:nn { \l__morandi_len_int } { 2 } } }
-    \int_compare:nNnT \l__morandi_len_int = 0 { \int_zero:N \l__morandi_cut_int }
-    { \bfseries \tl_range:nnn {#1} { 1 } { \l__morandi_cut_int } }
-    \tl_range:nnn {#1} { \l__morandi_cut_int + 1 } { -1 }
+    { \bfseries \tl_range:nnn {#1} { 1 } { \l__morandi_letters_int } }
+    \tl_range:nnn {#1} { \l__morandi_letters_int + 1 } { -1 }
   }
 
+% 從第 1 個單字開始，每 every 個單字把前 letters 個字母加粗
+% 例：every=3, letters=2 → 第 1、4、7… 個單字的前兩個字母加粗
 \NewDocumentCommand \bionic { m }
   {
     \legacy_if:nTF { morandi@bionic }
       {
         \seq_set_split:Nnn \l__morandi_words_seq { ~ } {#1}
-        \bool_set_true:N \l__morandi_first_bool
+        \int_zero:N \l__morandi_index_int
         \seq_map_inline:Nn \l__morandi_words_seq
           {
-            \bool_if:NF \l__morandi_first_bool { \c_space_tl }
-            \bool_set_false:N \l__morandi_first_bool
-            \__morandi_bionic_word:n {##1}
+            \int_compare:nNnF \l__morandi_index_int = 0 { \c_space_tl }
+            \int_compare:nNnTF
+              { \int_mod:nn { \l__morandi_index_int } { \int_max:nn { \l__morandi_every_int } { 1 } } } = 0
+              { \__morandi_bionic_word:n {##1} }
+              { ##1 }
+            \int_incr:N \l__morandi_index_int
           }
       }
       { #1 }

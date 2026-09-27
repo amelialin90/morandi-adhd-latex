@@ -6,7 +6,7 @@
 %    dark      深色護眼模式
 %    print     列印模式（白底）
 %    compact   較緊湊的行距
-%    nobionic  關閉英文仿生閱讀粗體
+%    nobionic  關閉英文閱讀引導粗體
 % =====================================================================
 \documentclass{morandi-adhd}
 
@@ -47,7 +47,7 @@
 
 \begin{itemize}
   \item \key{低彩度配色}：莫蘭迪色帶有灰調，不會搶走注意力。
-  \item \key{米色背景、深灰文字}：比純白底純黑字更不刺眼。
+  \item \key{暖白背景、深灰文字}：比純白底純黑字更不刺眼。
   \item \key{加大行距、靠左對齊}：避免字距忽大忽小，視線不易跳行。
   \item \key{閱讀進度條}：頁尾的綠色條告訴你「還剩多少」。
     \begin{itemize}
@@ -105,9 +105,9 @@
 
 \chunkbreak
 
-\subsection{英文仿生閱讀}
+\subsection{英文閱讀引導}
 
-英文段落可以用 \verb|\bionic{...}|，每個單字的前半會加粗，引導視線快速掃過：
+英文段落可以用 \verb|\bionic{...}|，每三個單字中，第一個單字的前兩個字母會加粗，當作視線的「落腳點」：
 
 \bionic{Reading long paragraphs can be exhausting when attention keeps drifting away from the page.}
 
