@@ -87,21 +87,46 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 | `compact` | 行距縮為 1.35 倍 |
 | `nobionic` | 關閉 `\bionic{}` 效果（直接輸出原文） |
 | `english` | 方塊標題、目錄、日期等介面文字改成英文（範例見 `main-en.tex`） |
+| `classic` | 改用 v1 的舊版 7 色配色 |
 | `12pt` 等 | 其他選項會傳給 `article` |
+
+### 配色（`morandi.sty`，12 色）
+
+講義、讀本、英文版和試卷共用同一組顏色，定義在 `morandi.sty`，模板會自動載入。
+其他文件也可以單獨使用：`\usepackage{morandi}`。
+
+| 名稱 | 色碼 | 色調 | 用途 |
+| --- | --- | --- | --- |
+| `mdDeep` | `#4F5D6B` | 霧藍灰 | 大標題、章名；英文版粗體字首 |
+| `mdBlue` | `#7D8FA3` | 灰藍 | 次標題、連結、頁碼、例題框 |
+| `mdTerm` | `#9B6B67` | 乾燥玫瑰 | 專有名詞、定義框邊線、答案字母 |
+| `mdRose` | `#C9A9A6` | 淺玫瑰 | 節號色塊、推導框標題、封面左邊線 |
+| `mdSage` | `#9AAA8F` | 鼠尾草綠 | 重點框邊線、項目符號、Big idea 框 |
+| `mdSand` | `#E8E1D5` | 奶茶 | 名詞框底色、自我檢查框標題 |
+| `mdCream` | `#F7F4EF` | 米白 | 封面框、重點框、定義框的底色 |
+| `mdRow` | `#F3EFE9` | 淺米 | 表格隔行底色 |
+| `mdHeadBg` | `#8C9AA6` | 藍灰 | 表格表頭底色（配白字） |
+| `mdLine` | `#C9C0B4` | 灰褐 | 分隔線、表格線、頁首線 |
+| `mdMuted` | `#8A8580` | 暖灰 | 次要文字、圖說、中文定義行 |
+| `mdText` | `#3E4145` | 深炭灰 | 內文文字 |
 
 ### 資訊方塊（顏色語意）
 
 | 環境 | 顏色 | 用途 |
 | --- | --- | --- |
-| `tldr` | 奶茶沙 | 一句話摘要，放在最前面 |
-| `goals` | 霧霾藍 | 本節目標 |
-| `keypoint` | 灰玫瑰 | 重點 |
-| `definition` | 霧霾藍 | 定義 |
-| `example` | 鼠尾草綠 | 範例 |
-| `tip` | 奶茶沙 | 小提示 |
-| `warning` | 陶土紅 | 注意 |
-| `question` | 灰紫 | 想一想 |
-| `summary` | 鼠尾草綠 | 本節回顧 |
+| `tldr` | 奶茶底、淺玫瑰邊 | 一句話摘要，放在最前面 |
+| `goals` | 霧藍灰 mdDeep | 本節目標 |
+| `keypoint` | 鼠尾草綠邊、米白底 | 重點 |
+| `definition` | 乾燥玫瑰邊、米白底 | 定義 |
+| `example` | 灰藍 mdBlue | 例題／範例 |
+| `tip` | 奶茶 mdSand | 小提示 |
+| `warning` | 淺玫瑰 mdRose | 注意 |
+| `question` | 暖灰 mdMuted | 想一想 |
+| `summary` | 鼠尾草綠 mdSage | 本節回顧 |
+| `bigidea` | 鼠尾草綠全框、米白底 | Big idea（整章最核心的概念） |
+| `derivation` | 淺玫瑰標題、灰褐框 | 推導 |
+| `selfcheck` | 奶茶標題、灰褐框 | 自我檢查（可搭配 `checklist`） |
+| `terms` | 奶茶底、乾燥玫瑰邊 | 名詞 |
 
 每個方塊都可以加副標題：`\begin{definition}[莫蘭迪色] ... \end{definition}`，方塊可以跨頁。
 
@@ -109,14 +134,15 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 
 | 指令 | 效果 |
 | --- | --- |
-| `\key{文字}` | 關鍵字（粗體 + 陶土色） |
+| `\key{文字}` | 專有名詞／關鍵字（粗體 + 乾燥玫瑰色） |
+| `\answer{B}` | 試卷答案字母（粗體 + 乾燥玫瑰色） |
 | `\hl{文字}` | 螢光筆標記，可跨行 |
-| `\soft{文字}` | 次要資訊（淡色小字） |
+| `\soft{文字}` | 次要資訊、中文定義行（暖灰小字） |
 | `\bionic{English text}` | 英文閱讀引導（僅限純英文） |
 | `\bionicsetup{every=3, letters=2}` | 調整 `\bionic` 每幾個單字加粗一次、加粗前幾個字母 |
 | `\takeabreak` / `\takeabreak[文字]` | 休息點 |
 | `\chunkbreak` | 輕量分隔線 |
-| `\zebra` + `\headerrow` | 斑馬紋表格、表頭底色 |
+| `\zebra` + `\headerrow` + `\headcell{}` | 斑馬紋表格；藍灰表頭配白字 |
 | `\morandisectionnewpage` | （導言區）每個 section 從新頁開始 |
 
 ### 清單
@@ -135,14 +161,14 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 
 ## 自訂
 
-**換顏色**：在導言區重新定義即可，例如
+**換顏色**：直接改 `morandi.sty`（所有文件一起換），或只在某份文件的導言區覆寫：
 
 ```latex
-\definecolor{MorandiRose}{HTML}{B8A1A8}
+\definecolor{mdBlue}{HTML}{6F8299}
 ```
 
-色盤：`MorandiRose` `MorandiSage` `MorandiBlue` `MorandiSand` `MorandiMauve` `MorandiClay` `MorandiStone`，
-以及 `PageBg`（背景）、`TextMain`（主文字）、`TextSoft`（次要文字）、`Heading`（標題）。
+版面各處都是透過 12 色對應的語意角色上色（例如 `Heading` = `mdDeep`、`KeyColor` = `mdTerm`），
+所以改一個顏色，所有用到它的地方都會跟著變。
 
 **換字型**：模板會自動尋找 Noto Sans CJK TC → 思源黑體 → 蘋方 → 微軟正黑體。要指定其他字型：
 
@@ -161,6 +187,7 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 
 ```
 morandi-adhd.cls   模板本體
+morandi.sty        莫蘭迪 12 色色盤
 main.tex           範例（淺色）
 main-dark.tex      範例（深色）
 main-en.tex        範例（英文，english 選項）

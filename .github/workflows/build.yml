@@ -2,7 +2,7 @@ name: Build PDF
 
 on:
   push:
-    paths: ["**.tex", "**.cls", ".github/workflows/build.yml"]
+    paths: ["**.tex", "**.cls", "**.sty", ".github/workflows/build.yml"]
   pull_request:
   workflow_dispatch:
 

@@ -89,8 +89,31 @@ automatically instead of re-reading the label each time.
 \end{warning}
 
 \begin{question}
-  Without scrolling back: what does a \emph{green} box stand for?
+  Without scrolling back: what does a box with a \emph{green} edge stand for?
 \end{question}
+
+\subsection{Boxes for Handouts}
+
+\begin{bigidea}
+  If you remember only one thing from this chapter, remember what is in this box.
+\end{bigidea}
+
+\begin{terms}
+  \key{Morandi colour}: a low-saturation colour mixed with grey.\\
+  \key{Palette}: a fixed set of colours used together, defined in \texttt{morandi.sty}.
+\end{terms}
+
+\begin{derivation}[Area of a triangle]
+  A rectangle has area $\text{base} \times \text{height}$; a triangle is half of the rectangle
+  with the same base and height, so $A = \tfrac{1}{2}bh$.
+\end{derivation}
+
+\begin{selfcheck}
+  \begin{checklist}
+    \item I can explain the difference between a key-point box and a definition box
+    \item I know answer letters are marked with \verb|\answer{B}|, e.g. answer: \answer{B}
+  \end{checklist}
+\end{selfcheck}
 
 \subsection{Tables}
 
@@ -98,14 +121,16 @@ automatically instead of re-reading the label each time.
   \zebra
   \begin{tabular}{lll}
     \toprule
-    \headerrow \textbf{Environment} & \textbf{Colour} & \textbf{Purpose} \\
+    \headerrow \headcell{Environment} & \headcell{Colour} & \headcell{Purpose} \\
     \midrule
-    \texttt{keypoint}   & Dusty rose  & Key point      \\
-    \texttt{definition} & Haze blue   & Definition     \\
-    \texttt{example}    & Sage green  & Example        \\
-    \texttt{tip}        & Milk-tea sand & Tip          \\
-    \texttt{warning}    & Clay red    & Caution        \\
-    \texttt{question}   & Grey mauve  & Think about it \\
+    \texttt{keypoint}   & Sage mdSage        & Key point      \\
+    \texttt{definition} & Dried rose mdTerm  & Definition     \\
+    \texttt{example}    & Grey blue mdBlue   & Worked example \\
+    \texttt{goals}      & Deep blue mdDeep   & Goals          \\
+    \texttt{tip}        & Milk tea mdSand    & Tip            \\
+    \texttt{warning}    & Light rose mdRose  & Caution        \\
+    \texttt{question}   & Warm grey mdMuted  & Think about it \\
+    \texttt{terms}   & Milk tea mdSand    & Key terms      \\
     \bottomrule
   \end{tabular}
 \end{center}

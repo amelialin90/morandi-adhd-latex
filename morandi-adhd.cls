@@ -15,6 +15,7 @@
 %%   bionic    開啟 \bionic{} 的英文粗體引導（預設開啟，nobionic 關閉）
 %%   compact   較緊湊的行距（1.35 倍，預設 1.6 倍）
 %%   english   介面文字（方塊標題、目錄、日期…）改成英文
+%%   classic   使用 v1 的舊版 7 色配色（預設為 morandi.sty 的 12 色）
 %%   其他選項會傳給 article
 %% ---------------------------------------------------------------------
 \newif\ifmorandi@dark     \morandi@darkfalse
@@ -22,6 +23,7 @@
 \newif\ifmorandi@bionic   \morandi@bionictrue
 \newif\ifmorandi@compact  \morandi@compactfalse
 \newif\ifmorandi@english  \morandi@englishfalse
+\newif\ifmorandi@classic  \morandi@classicfalse
 
 \DeclareOption{dark}{\morandi@darktrue}
 \DeclareOption{print}{\morandi@printtrue}
@@ -29,6 +31,7 @@
 \DeclareOption{nobionic}{\morandi@bionicfalse}
 \DeclareOption{compact}{\morandi@compacttrue}
 \DeclareOption{english}{\morandi@englishtrue}
+\DeclareOption{classic}{\morandi@classictrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 
@@ -61,48 +64,92 @@
 \RequirePackage{tikz}
 \RequirePackage[most]{tcolorbox}
 \RequirePackage{needspace}
+\RequirePackage{caption}
 \RequirePackage{hyperref}
 
 %% ---------------------------------------------------------------------
 %% 莫蘭迪色盤 Morandi palette
-%%   低彩度、帶灰調的顏色：降低視覺刺激，但仍保有足夠的區辨度，
-%%   讓不同類型的資訊一眼就能分辨。
+%%   12 色定義在 morandi.sty（講義、讀本、英文版、試卷共用）。
+%%   這裡把顏色對應到「語意角色」，版面其他地方只使用角色名稱，
+%%   所以換色盤時只要改這一段。
 %% ---------------------------------------------------------------------
-\definecolor{MorandiRose}   {HTML}{C4A4A0} % 灰玫瑰：重點
-\definecolor{MorandiSage}   {HTML}{9EAE95} % 鼠尾草綠：範例、完成
-\definecolor{MorandiBlue}   {HTML}{8DA1B0} % 霧霾藍：定義、資訊
-\definecolor{MorandiSand}   {HTML}{C9B79C} % 奶茶沙：提示
-\definecolor{MorandiMauve}  {HTML}{A698AE} % 灰紫：思考、問題
-\definecolor{MorandiClay}   {HTML}{B98B7D} % 陶土紅：注意、警告
-\definecolor{MorandiStone}  {HTML}{A9A39A} % 岩灰：輔助線條
+\RequirePackage{morandi}
 
+% v1 舊版 7 色：保留名稱，classic 選項會用它們覆寫 12 色
+\definecolor{MorandiRose}   {HTML}{C4A4A0} % 灰玫瑰
+\definecolor{MorandiSage}   {HTML}{9EAE95} % 鼠尾草綠
+\definecolor{MorandiBlue}   {HTML}{8DA1B0} % 霧霾藍
+\definecolor{MorandiSand}   {HTML}{C9B79C} % 奶茶沙
+\definecolor{MorandiMauve}  {HTML}{A698AE} % 灰紫
+\definecolor{MorandiClay}   {HTML}{B98B7D} % 陶土紅
+\definecolor{MorandiStone}  {HTML}{A9A39A} % 岩灰
+
+% 角色在 \begin{document} 才對應，所以在導言區改 mdBlue 等 12 色也會生效
+\newcommand\morandi@setroles{%
+\ifmorandi@classic
+  \definecolor{mdDeep}  {HTML}{6E5A57}
+  \colorlet{mdBlue}  {MorandiBlue}
+  \colorlet{mdTerm}  {MorandiClay}
+  \colorlet{mdRose}  {MorandiRose}
+  \colorlet{mdSage}  {MorandiSage}
+  \colorlet{mdSand}  {MorandiSand!55!white}
+  \definecolor{mdCream} {HTML}{F6F2EC}
+  \colorlet{mdRow}   {MorandiStone!14!white}
+  \colorlet{mdHeadBg}{MorandiBlue}
+  \colorlet{mdLine}  {MorandiStone!60!white}
+  \colorlet{mdMuted} {MorandiMauve!60!MorandiStone}
+  \definecolor{mdText}  {HTML}{3F3B38}
+\fi
+
+%% ---- 語意角色 --------------------------------------------------------
 \ifmorandi@dark
-  % 深色模式：深灰藍底、米白字（避免純黑純白的強烈對比）
+  % 深色模式：深灰藍底、米白字；方塊底色改用各色與背景混合
   \definecolor{PageBg}   {HTML}{2E3136}
   \definecolor{TextMain} {HTML}{E4DED6}
   \definecolor{TextSoft} {HTML}{B5AFA7}
-  \definecolor{Heading}  {HTML}{E9D7D2}
-  \definecolor{BoxBgMix} {HTML}{2E3136}
-  \def\morandi@boxmix{22}
+  \colorlet{TintBase}    {PageBg}
+  \colorlet{Heading}     {mdRose!45!white}
+  \colorlet{SubHeading}  {mdBlue!55!white}
+  \colorlet{KeyColor}    {mdRose}
+  \colorlet{BionicColor} {mdBlue!45!white}
+  \colorlet{RuleColor}   {mdLine!45!PageBg}
+  \colorlet{CoverBg}     {mdRose!16!PageBg}
+  \colorlet{BoxCream}    {white!7!PageBg}
+  \colorlet{TableRowBg}  {white!6!PageBg}
+  \colorlet{TableHeadBg} {mdHeadBg!65!PageBg}
+  \colorlet{HighlightColor}{mdRose!38!PageBg}
 \else
-  % 淺色模式：偏白的暖白底、深灰字（比純白底柔和，又比米色更清爽）
-  \definecolor{PageBg}   {HTML}{FBFAF7}
-  \definecolor{TextMain} {HTML}{3F3B38}
-  \definecolor{TextSoft} {HTML}{7A736C}
-  \definecolor{Heading}  {HTML}{6E5A57}
-  \definecolor{BoxBgMix} {HTML}{FFFFFF}
-  \def\morandi@boxmix{22}
+  % 淺色模式：偏白的暖白底、深炭灰字
+  \definecolor{PageBg}   {HTML}{FCFBF9}
+  \colorlet{TextMain}    {mdText}
+  \colorlet{TextSoft}    {mdMuted}
+  \colorlet{TintBase}    {white}
+  \colorlet{Heading}     {mdDeep}       % 大標題、章名
+  \colorlet{SubHeading}  {mdBlue}       % 次標題
+  \colorlet{KeyColor}    {mdTerm}       % 專有名詞、答案字母
+  \colorlet{BionicColor} {mdDeep}       % 英文粗體字首
+  \colorlet{RuleColor}   {mdLine}       % 分隔線、表格線、頁首線
+  \colorlet{CoverBg}     {mdCream}      % 封面框
+  \colorlet{BoxCream}    {mdCream}      % 重點框、定義框底色
+  \colorlet{TableRowBg}  {mdRow}        % 表格隔行
+  \colorlet{TableHeadBg} {mdHeadBg}     % 表頭
+  \colorlet{HighlightColor}{mdSand}     % 螢光筆
 \fi
 \ifmorandi@print
-  \definecolor{PageBg}  {HTML}{FFFFFF}
-  \definecolor{BoxBgMix}{HTML}{FFFFFF}
+  \definecolor{PageBg}{HTML}{FFFFFF}
 \fi
-
-\colorlet{LinkColor}{MorandiBlue!70!TextMain}
-\colorlet{HighlightColor}{MorandiSand!60!PageBg}
+\colorlet{LinkColor}     {mdBlue}       % 連結
+\colorlet{PageNumColor}  {mdBlue}       % 頁碼
+\colorlet{SecNumBg}      {mdRose}       % 節號色塊
+\colorlet{CoverAccent}   {mdRose}       % 封面左邊線
+\colorlet{BulletColor}   {mdSage}       % 項目符號
+\colorlet{ProgressColor} {mdSage}
+\colorlet{TableHeadText} {white}
 
 \pagecolor{PageBg}
 \color{TextMain}
+}
+\AtBeginDocument{\morandi@setroles}
 
 %% ---------------------------------------------------------------------
 %% 字型 Fonts
@@ -193,17 +240,17 @@
 %% ---------------------------------------------------------------------
 \titleformat{\section}[hang]
   {\needspace{7\baselineskip}\Large\bfseries\color{Heading}}
-  {\tikz[baseline=(n.base)]\node[fill=MorandiRose, text=white, rounded corners=3pt,
+  {\tikz[baseline=(n.base)]\node[fill=SecNumBg, text=white, rounded corners=3pt,
      inner xsep=6pt, inner ysep=3pt, font=\large\bfseries](n){\thesection};}
   {0.6em}{}
-  [\vspace{-0.72\baselineskip}{\color{MorandiRose!60!PageBg}\rule{\linewidth}{1.2pt}}]
+  [\vspace{-0.72\baselineskip}{\color{RuleColor}\rule{\linewidth}{1pt}}]
 \titleformat{\subsection}
-  {\needspace{5\baselineskip}\large\bfseries\color{Heading}}
-  {{\color{MorandiSage}\rule[-0.15em]{4pt}{1.1em}}\hspace{0.5em}\thesubsection}
+  {\needspace{5\baselineskip}\large\bfseries\color{SubHeading}}
+  {{\color{BulletColor}\rule[-0.15em]{4pt}{1.1em}}\hspace{0.5em}\thesubsection}
   {0.6em}{}
 \titleformat{\subsubsection}
-  {\normalsize\bfseries\color{Heading}}
-  {{\color{MorandiBlue}\ding{110}}\hspace{0.3em}\thesubsubsection}
+  {\normalsize\bfseries\color{SubHeading}}
+  {{\color{BulletColor}\ding{110}}\hspace{0.3em}\thesubsubsection}
   {0.5em}{}
 \titlespacing*{\section}{0pt}{2.2em}{1.0em}
 \titlespacing*{\subsection}{0pt}{1.6em}{0.6em}
@@ -217,12 +264,12 @@
 %% 目錄
 \titlecontents{section}[2em]
   {\vspace{0.4em}\bfseries\color{Heading}}
-  {\contentslabel[{\color{MorandiRose}\thecontentslabel}]{2em}}
-  {}{\titlerule*[0.6pc]{\color{MorandiStone}.}\contentspage}
+  {\contentslabel[{\color{SecNumBg}\thecontentslabel}]{2em}}
+  {}{\titlerule*[0.6pc]{\color{RuleColor}.}\contentspage}
 \titlecontents{subsection}[4.6em]
   {\color{TextMain}}
-  {\contentslabel[{\color{MorandiSage!80!TextMain}\thecontentslabel}]{2.6em}}
-  {}{\titlerule*[0.6pc]{\color{MorandiStone}.}\contentspage}
+  {\contentslabel[{\color{SubHeading}\thecontentslabel}]{2.6em}}
+  {}{\titlerule*[0.6pc]{\color{RuleColor}.}\contentspage}
 
 % 目錄行距稍微收緊，方便一眼看完整體架構
 \let\morandi@oldtoc\tableofcontents
@@ -237,19 +284,20 @@
   \begin{tikzpicture}
     \pgfmathsetmacro\morandi@total{max(\getpagerefnumber{LastPage},1)}%
     \pgfmathsetmacro\morandi@ratio{min(\thepage/\morandi@total,1)}%
-    \fill[MorandiStone!35!PageBg, rounded corners=1.5pt] (0,0) rectangle (\linewidth,3pt);
-    \fill[MorandiSage, rounded corners=1.5pt] (0,0) rectangle (\morandi@ratio\linewidth,3pt);
+    \fill[RuleColor!45!PageBg, rounded corners=1.5pt] (0,0) rectangle (\linewidth,3pt);
+    \fill[ProgressColor, rounded corners=1.5pt] (0,0) rectangle (\morandi@ratio\linewidth,3pt);
   \end{tikzpicture}}
 
 \pagestyle{fancy}
 \fancyhf{}
-\renewcommand\headrulewidth{0pt}
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\headrule{{\color{RuleColor}\hrule height\headrulewidth\vskip-\headrulewidth}}
 \fancyhead[L]{\small\color{TextSoft}\rightmark}
 \fancyhead[R]{\small\color{TextSoft}\@title}
 \fancyfoot[C]{\morandi@progressbar\\[2pt]
-  \small\color{TextSoft}\thepage\ /\ \pageref*{LastPage}}
-\fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\morandi@progressbar\\[2pt]
-  \small\color{TextSoft}\thepage\ /\ \pageref*{LastPage}}}
+  \small\color{PageNumColor}\thepage\ /\ \pageref*{LastPage}}
+\fancypagestyle{plain}{\fancyhf{}\renewcommand\headrulewidth{0pt}\fancyfoot[C]{\morandi@progressbar\\[2pt]
+  \small\color{PageNumColor}\thepage\ /\ \pageref*{LastPage}}}
 % 頁首顯示「本頁開頭所在的章節」，而不是本頁最後一個章節
 \renewcommand\sectionmark[1]{\markboth{\thesection\quad #1}{\thesection\quad #1}}
 \setlength{\headheight}{16pt}
@@ -257,6 +305,8 @@
 %% ---------------------------------------------------------------------
 %% 封面標題 Title
 %% ---------------------------------------------------------------------
+% 沒寫 \title 也能編譯（頁首會用到標題）
+\gdef\@title{}
 \newcommand\subtitle[1]{\gdef\morandi@subtitle{#1}}
 \gdef\morandi@subtitle{}
 \newcommand\readingtime[1]{\gdef\morandi@readingtime{#1}}
@@ -264,9 +314,9 @@
 
 \renewcommand\maketitle{%
   \thispagestyle{plain}%
-  \begin{tcolorbox}[enhanced, colback=MorandiRose!25!PageBg, colframe=MorandiRose!25!PageBg,
+  \begin{tcolorbox}[enhanced, colback=CoverBg, colframe=CoverBg,
       arc=6pt, boxrule=0pt, left=14pt, right=14pt, top=14pt, bottom=12pt,
-      borderline west={5pt}{0pt}{MorandiRose}]
+      borderline west={5pt}{0pt}{CoverAccent}]
     {\LARGE\bfseries\color{Heading}\@title\par}
     \ifx\morandi@subtitle\@empty\else
       \vspace{0.3em}{\large\color{TextSoft}\morandi@subtitle\par}\fi
@@ -280,52 +330,72 @@
 %% ---------------------------------------------------------------------
 %% 資訊方塊 Callout boxes
 %%   不同顏色 = 不同用途。固定的顏色語意讓大腦不必每次重新判讀。
-%%     tldr      一句話摘要（放在最前面）
-%%     goals     本節目標
-%%     keypoint  重點
-%%     definition 定義
-%%     example   範例
-%%     tip       小提示
-%%     warning   注意
-%%     question  想一想
-%%     summary   本節回顧
+%%     tldr        一句話摘要（放在最前面）  奶茶底、淺玫瑰邊
+%%     goals       本節目標                  霧藍灰
+%%     keypoint    重點                      鼠尾草綠邊、米白底
+%%     definition  定義                      乾燥玫瑰邊、米白底
+%%     example     例題／範例                灰藍
+%%     tip         小提示                    奶茶
+%%     warning     注意                      淺玫瑰
+%%     question    想一想                    暖灰
+%%     summary     本節回顧                  鼠尾草綠
+%%     bigidea     Big idea                  鼠尾草綠全框、米白底
+%%     derivation  推導                      淺玫瑰標題、灰褐邊
+%%     selfcheck   自我檢查                  奶茶標題、灰褐邊
+%%     terms       名詞                      奶茶底、乾燥玫瑰邊
 %% ---------------------------------------------------------------------
 \tcbset{morandi/.style={
     enhanced, breakable, arc=4pt, boxrule=0pt,
-    left=10pt, right=10pt, top=6pt, bottom=6pt,
+    left=10pt, right=10pt, top=12pt, bottom=6pt,
     before skip=1.1em, after skip=1.3em,
-    fonttitle=\bfseries\small, coltitle=white,
+    fonttitle=\bfseries\small,
     colupper=TextMain,
     attach boxed title to top left={xshift=8pt, yshift=-7pt},
     boxed title style={arc=3pt, boxrule=0pt},
   }}
 
-% \morandi@newbox{環境名}{顏色}{預設標題}
-\newcommand\morandi@newbox[3]{%
-  \newtcolorbox{#1}[1][]{morandi,
-    colback=#2!\morandi@boxmix!BoxBgMix,
-    borderline west={3pt}{0pt}{#2},
-    boxed title style={colback=#2},
-    title={#3\if\relax\detokenize{##1}\relax\else\morandi@titlesep##1\fi},
-    top=12pt}}
+% 淺色模式用指定底色；深色模式改用邊線色與背景混合，避免亮色方塊刺眼
+\newcommand\morandi@bodycolor[2]{% #1 = 邊線色, #2 = 淺色模式底色
+  \ifmorandi@dark #1!16!PageBg\else #2\fi}
+
+% \morandi@newbox[額外設定]{環境名}{邊線色}{標題底色}{標題字色}{底色}{預設標題}
+\newcommand\morandi@newbox[7][]{%
+  \newtcolorbox{#2}[1][]{morandi,
+    colback=\morandi@bodycolor{#3}{#6},
+    borderline west={3pt}{0pt}{#3},
+    boxed title style={colback=#4}, coltitle=#5,
+    title={#7\if\relax\detokenize{##1}\relax\else\morandi@titlesep##1\fi}, #1}}
+
+% 推導框、自我檢查框底色是白的，加一圈灰褐細框才看得出範圍
+\tcbset{morandi/outlined/.style={colframe=RuleColor, boxrule=0.6pt, leftrule=3pt}}
 
 % 方塊標題文字在檔案最後依語言設定（見「介面語言」）
+%                  環境          邊線      標題底    標題字   淺色底色             標題
+\morandi@newbox{keypoint}  {mdSage} {mdSage} {white}  {BoxCream}           {\keypointname}
+\morandi@newbox{definition}{mdTerm} {mdTerm} {white}  {BoxCream}           {\definitionname}
+\morandi@newbox{example}   {mdBlue} {mdBlue} {white}  {mdBlue!8!TintBase}  {\examplename}
+\morandi@newbox{goals}     {mdDeep} {mdDeep} {white}  {mdDeep!6!TintBase}  {\goalsname}
+\morandi@newbox{tip}       {mdLine} {mdSand} {mdDeep} {mdSand!45!TintBase} {\tipname}
+\morandi@newbox{warning}   {mdRose} {mdRose} {white}  {mdRose!18!TintBase} {\warningname}
+\morandi@newbox{question}  {mdMuted}{mdMuted}{white}  {mdMuted!8!TintBase} {\questionname}
+\morandi@newbox{summary}   {mdSage} {mdSage} {white}  {mdSage!12!TintBase} {\summaryname}
+\morandi@newbox[morandi/outlined]{derivation}{mdLine} {mdRose} {white}  {TintBase}           {\derivationname}
+\morandi@newbox[morandi/outlined]{selfcheck} {mdLine} {mdSand} {mdDeep} {TintBase}           {\selfcheckname}
+\morandi@newbox{terms}     {mdTerm} {mdTerm} {white}  {mdSand}             {\termsname}
 
-\morandi@newbox{keypoint}  {MorandiRose} {\keypointname}
-\morandi@newbox{definition}{MorandiBlue} {\definitionname}
-\morandi@newbox{example}   {MorandiSage} {\examplename}
-\morandi@newbox{tip}       {MorandiSand} {\tipname}
-\morandi@newbox{warning}   {MorandiClay} {\warningname}
-\morandi@newbox{question}  {MorandiMauve}{\questionname}
-\morandi@newbox{summary}   {MorandiSage} {\summaryname}
-\morandi@newbox{goals}     {MorandiBlue} {\goalsname}
+% Big idea：四邊全框，份量比一般方塊重，用在整章最核心的概念
+\newtcolorbox{bigidea}[1][]{morandi,
+  colback=\morandi@bodycolor{mdSage}{BoxCream}, colframe=mdSage, boxrule=1.2pt,
+  fontupper=\large, top=14pt, bottom=8pt,
+  boxed title style={colback=mdSage}, coltitle=white,
+  title={\bigideaname\if\relax\detokenize{#1}\relax\else\morandi@titlesep#1\fi}}
 
-% TL;DR：無外框的大字條
-\newtcolorbox{tldr}{morandi, colback=MorandiSand!30!BoxBgMix,
-  borderline west={5pt}{0pt}{MorandiSand},
+% TL;DR：無標題籤的大字條
+\newtcolorbox{tldr}{morandi, colback=\morandi@bodycolor{mdRose}{mdSand!60!TintBase},
+  borderline west={5pt}{0pt}{mdRose},
   fontupper=\large, top=8pt, bottom=8pt, left=12pt,
   before upper=\morandi@tldrlabel}
-\newcommand\morandi@tldrlabel{\textbf{\textcolor{MorandiSand!55!TextMain}{\tldrname}}\quad}
+\newcommand\morandi@tldrlabel{\textbf{\textcolor{KeyColor}{\tldrname}}\quad}
 
 %% ---------------------------------------------------------------------
 %% 清單 Lists
@@ -333,14 +403,14 @@
 %%   把大任務拆成小步驟，對執行功能較弱的讀者特別有幫助。
 %% ---------------------------------------------------------------------
 \setlist{itemsep=0.35em, topsep=0.4em, leftmargin=1.8em}
-\setlist[itemize,1]{label={\color{MorandiRose}\ding{108}}, font=\scriptsize}
-\setlist[itemize,2]{label={\color{MorandiSage}\ding{109}}, font=\scriptsize}
-\setlist[itemize,3]{label={\color{MorandiBlue}\textbullet}}
-\setlist[enumerate,1]{label={\color{MorandiRose!80!TextMain}\bfseries\arabic*.}}
-\setlist[enumerate,2]{label={\color{MorandiSage!80!TextMain}\bfseries(\alph*)}}
+\setlist[itemize,1]{label={\color{BulletColor}\ding{108}}, font=\scriptsize}
+\setlist[itemize,2]{label={\color{mdRose}\ding{109}}, font=\scriptsize}
+\setlist[itemize,3]{label={\color{mdBlue}\textbullet}}
+\setlist[enumerate,1]{label={\color{SubHeading}\bfseries\arabic*.}}
+\setlist[enumerate,2]{label={\color{BulletColor}\bfseries(\alph*)}}
 
-\newcommand\morandi@unchecked{{\color{MorandiStone}\large\ding{113}}}
-\newcommand\morandi@checked{{\color{MorandiSage}\large\ding{51}}}
+\newcommand\morandi@unchecked{{\color{mdLine}\large\ding{113}}}
+\newcommand\morandi@checked{{\color{BulletColor}\large\ding{51}}}
 \newlist{checklist}{itemize}{2}
 \setlist[checklist]{label=\morandi@unchecked, leftmargin=2em, itemsep=0.1em}
 \newcommand\done{\item[\morandi@checked]}
@@ -348,7 +418,7 @@
 % steps：大圓圈編號的步驟
 \newlist{steps}{enumerate}{1}
 \DeclareRobustCommand\morandi@stepnum[1]{\tikz[baseline=(c.base)]\node[circle,
-    fill=MorandiBlue, text=white, font=\small\bfseries, inner sep=0pt,
+    fill=mdBlue, text=white, font=\small\bfseries, inner sep=0pt,
     minimum size=1.5em](c){#1};}
 \setlist[steps]{label=\morandi@stepnum{\arabic*}, leftmargin=2.5em, itemsep=0.6em}
 
@@ -360,7 +430,9 @@
 %%   \bionic{...} 英文閱讀引導：每三個單字，第一個單字的前兩個字母加粗
 %%                 （可用 \bionicsetup{every=3, letters=2} 調整）
 %% ---------------------------------------------------------------------
-\newcommand\key[1]{{\bfseries\color{MorandiClay!85!TextMain}#1}}
+\newcommand\key[1]{{\bfseries\color{KeyColor}#1}}
+% 試卷答案字母，例如 \answer{B}
+\newcommand\answer[1]{{\bfseries\color{KeyColor}#1}}
 \newcommand\soft[1]{{\color{TextSoft}\small #1}}
 
 \newcommand\hl[1]{%
@@ -390,7 +462,7 @@
 
 \cs_new_protected:Npn \__morandi_bionic_word:n #1
   {
-    { \bfseries \tl_range:nnn {#1} { 1 } { \l__morandi_letters_int } }
+    { \bfseries \color{BionicColor} \tl_range:nnn {#1} { 1 } { \l__morandi_letters_int } }
     \tl_range:nnn {#1} { \l__morandi_letters_int + 1 } { -1 }
   }
 
@@ -424,7 +496,7 @@
   \par\vspace{1.2em}%
   \begin{center}
     \begin{tikzpicture}
-      \foreach \c [count=\i] in {MorandiRose,MorandiSand,MorandiSage,MorandiBlue,MorandiMauve}
+      \foreach \c [count=\i] in {mdRose,mdSage,mdBlue,mdTerm,mdMuted}
         \fill[\c] (\i*0.45,0) circle (2.6pt);
     \end{tikzpicture}\\[0.2em]
     {\small\color{TextSoft}#1}
@@ -433,13 +505,21 @@
 
 %% 輕量分隔線
 \newcommand\chunkbreak{\par\vspace{0.4em}%
-  {\centering\color{MorandiStone!60!PageBg}\rule{0.3\linewidth}{0.8pt}\par}\vspace{0.4em}}
+  {\centering\color{RuleColor}\rule{0.3\linewidth}{0.8pt}\par}\vspace{0.4em}}
 
 %% ---------------------------------------------------------------------
 %% 表格 Tables：斑馬紋讓視線不容易跑錯列
 %% ---------------------------------------------------------------------
-\newcommand\zebra{\rowcolors{2}{MorandiStone!14!PageBg}{PageBg}}
-\newcommand\headerrow{\rowcolor{MorandiBlue!35!PageBg}}
+\newcommand\zebra{\rowcolors{2}{TableRowBg}{PageBg}}
+\newcommand\headerrow{\rowcolor{TableHeadBg}}
+% 表頭文字（白字粗體），搭配 \headerrow 使用
+\newcommand\headcell[1]{{\color{TableHeadText}\bfseries #1}}
+\AtBeginDocument{\arrayrulecolor{RuleColor}}
+
+%% 圖說 Captions：暖灰小字，標籤用次標題色
+\DeclareCaptionFont{morandimuted}{\color{TextSoft}}
+\DeclareCaptionFont{morandilabel}{\color{SubHeading}}
+\captionsetup{font={small,morandimuted}, labelfont={bf,morandilabel}}
 
 %% ---------------------------------------------------------------------
 %% 介面語言 Interface language
@@ -456,6 +536,10 @@
   \newcommand\warningname{Caution}
   \newcommand\questionname{Think About It}
   \newcommand\summaryname{Recap}
+  \newcommand\bigideaname{Big Idea}
+  \newcommand\derivationname{Derivation}
+  \newcommand\selfcheckname{Self-Check}
+  \newcommand\termsname{Key Terms}
   \newcommand\breakname{Take a short break, then keep going}
   \newcommand\readingtimename{Reading time}
   \newcommand\morandi@titlesep{:\space}
@@ -469,6 +553,10 @@
   \newcommand\warningname{注意}
   \newcommand\questionname{想一想}
   \newcommand\summaryname{本節回顧}
+  \newcommand\bigideaname{Big idea}
+  \newcommand\derivationname{推導}
+  \newcommand\selfcheckname{自我檢查}
+  \newcommand\termsname{名詞}
   \newcommand\breakname{休息一下，再繼續}
   \newcommand\readingtimename{預估閱讀}
   \newcommand\morandi@titlesep{：}
