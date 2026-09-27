@@ -1,0 +1,17 @@
+# LaTeX 編譯產生的暫存檔
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.pdf
+!docs/*.pdf
