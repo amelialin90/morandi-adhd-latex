@@ -12,7 +12,9 @@
 
 </details>
 
-範例 PDF：[淺色](docs/example.pdf)｜[深色](docs/example-dark.pdf)
+範例 PDF：[淺色](docs/example.pdf)｜[深色](docs/example-dark.pdf)｜[English](docs/example-en.pdf)
+
+> **English:** An ADHD-friendly LaTeX notes template with a calm Morandi palette. Compile with XeLaTeX and add the `english` class option for English labels — see [`main-en.tex`](main-en.tex) and the [example PDF](docs/example-en.pdf).
 
 ---
 
@@ -84,6 +86,7 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 | `print` | 白底，適合列印 |
 | `compact` | 行距縮為 1.35 倍 |
 | `nobionic` | 關閉 `\bionic{}` 效果（直接輸出原文） |
+| `english` | 方塊標題、目錄、日期等介面文字改成英文（範例見 `main-en.tex`） |
 | `12pt` 等 | 其他選項會傳給 `article` |
 
 ### 資訊方塊（顏色語意）
@@ -147,7 +150,7 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 \setCJKmainfont{jf open 粉圓}
 ```
 
-**改方塊標題文字**（例如改成英文）：
+**改方塊標題文字**（整份改英文請用 `english` 選項；個別修改如下）：
 
 ```latex
 \renewcommand\keypointname{Key Point}
@@ -160,6 +163,7 @@ latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 morandi-adhd.cls   模板本體
 main.tex           範例（淺色）
 main-dark.tex      範例（深色）
+main-en.tex        範例（英文，english 選項）
 .latexmkrc         latexmk 設定（使用 XeLaTeX）
 docs/              預覽圖與範例 PDF
 ```
