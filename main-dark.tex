@@ -1,0 +1,132 @@
+% =====================================================================
+%  範例文件（深色模式）：莫蘭迪 × ADHD 友善閱讀模板
+%  編譯：latexmk -xelatex main-dark.tex
+%
+%  可用選項（加在 \documentclass[...] 裡）：
+%    dark      深色護眼模式
+%    print     列印模式（白底）
+%    compact   較緊湊的行距
+%    nobionic  關閉英文閱讀引導粗體
+% =====================================================================
+\documentclass[dark]{morandi-adhd}
+
+\title{莫蘭迪 ADHD 友善筆記模板}
+\subtitle{低刺激配色、清楚分塊、一眼找到重點}
+\author{你的名字}
+\date{\today}
+\readingtime{約 5 分鐘}
+
+\begin{document}
+
+\maketitle
+
+\begin{tldr}
+  這份模板用\key{柔和的莫蘭迪色}降低視覺疲勞，用\key{固定的顏色語意}和\key{短段落}幫助專注。
+\end{tldr}
+
+\tableofcontents
+
+\section{為什麼需要 ADHD 友善排版？}
+
+\begin{goals}
+  \begin{checklist}
+    \item 了解這份模板的設計原則
+    \item 知道每一種顏色方塊代表什麼
+    \item 能開始用它寫自己的筆記
+  \end{checklist}
+\end{goals}
+
+注意力不容易維持的讀者，面對\hl{一大片密密麻麻的文字}時，常常讀了三行就開始分心。
+這份模板把文件拆成\key{一小塊一小塊}，每一塊都有明確的顏色和標題。
+
+\begin{keypoint}
+  一段只講一件事。段落短、留白多，讀者就比較容易「讀完一塊、休息、再讀下一塊」。
+\end{keypoint}
+
+\subsection{設計原則}
+
+\begin{itemize}
+  \item \key{低彩度配色}：莫蘭迪色帶有灰調，不會搶走注意力。
+  \item \key{暖白背景、深灰文字}：比純白底純黑字更不刺眼。
+  \item \key{加大行距、靠左對齊}：避免字距忽大忽小，視線不易跳行。
+  \item \key{閱讀進度條}：頁尾的綠色條告訴你「還剩多少」。
+    \begin{itemize}
+      \item 知道終點在哪裡，比較不會焦慮。
+    \end{itemize}
+\end{itemize}
+
+\takeabreak
+
+\section{顏色語意一覽}
+
+每種方塊都有固定的顏色，看久了大腦會自動辨認，不需要每次重新判讀。
+
+\begin{definition}[莫蘭迪色]
+  源自義大利畫家 Giorgio Morandi 的靜物畫，特色是在顏色中加入灰色，形成低飽和、溫和的色調。
+\end{definition}
+
+\begin{example}
+  \begin{steps}
+    \item 打開 \texttt{main.tex}
+    \item 把標題、作者改成你自己的
+    \item 用 \texttt{latexmk -xelatex main-dark.tex} 編譯
+  \end{steps}
+\end{example}
+
+\begin{tip}
+  重要的詞用 \verb|\key{...}|，想畫螢光筆用 \verb|\hl{...}|，次要資訊用 \verb|\soft{...}| \soft{（像這樣變淡）}。
+\end{tip}
+
+\begin{warning}
+  這個模板需要用 \key{XeLaTeX} 編譯，pdfLaTeX 無法處理中文字型。
+\end{warning}
+
+\begin{question}
+  你讀完這一節，還記得「綠色方塊」代表什麼嗎？
+\end{question}
+
+\subsection{表格}
+
+\begin{center}
+  \zebra
+  \begin{tabular}{lll}
+    \toprule
+    \headerrow \textbf{環境} & \textbf{顏色} & \textbf{用途} \\
+    \midrule
+    \texttt{keypoint}   & 灰玫瑰   & 重點     \\
+    \texttt{definition} & 霧霾藍   & 定義     \\
+    \texttt{example}    & 鼠尾草綠 & 範例     \\
+    \texttt{tip}        & 奶茶沙   & 小提示   \\
+    \texttt{warning}    & 陶土紅   & 注意     \\
+    \texttt{question}   & 灰紫     & 想一想   \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\chunkbreak
+
+\subsection{英文閱讀引導}
+
+英文段落可以用 \verb|\bionic{...}|，每三個單字中，第一個單字的前兩個字母會加粗，當作視線的「落腳點」：
+
+\bionic{Reading long paragraphs can be exhausting when attention keeps drifting away from the page.}
+
+\takeabreak[做得好！只剩最後一節]
+
+\section{數學也可以}
+
+行內公式 $E = mc^2$，或是獨立公式：
+\[
+  \int_0^1 x^2 \, dx = \frac{1}{3}
+\]
+
+\begin{summary}
+  \begin{checklist}
+    \done 用顏色區分資訊類型
+    \done 短段落 + 留白
+    \done 進度條減少焦慮
+    \item 開始寫你自己的筆記！
+  \end{checklist}
+\end{summary}
+
+\end{document}
