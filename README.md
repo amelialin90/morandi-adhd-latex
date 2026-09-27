@@ -46,8 +46,8 @@
 需要 TeX Live（或 MacTeX／MiKTeX）：
 
 ```bash
-git clone https://github.com/amelialin90/LaTeX_template.git
-cd LaTeX_template
+git clone https://github.com/amelialin90/morandi-adhd-latex.git
+cd morandi-adhd-latex
 latexmk main.tex        # .latexmkrc 已設定好使用 XeLaTeX
 ```
 
