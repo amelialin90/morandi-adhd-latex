@@ -14,18 +14,21 @@
 %%   print     列印模式（白底、不填滿頁面背景色）
 %%   bionic    開啟 \bionic{} 的英文粗體引導（預設開啟，nobionic 關閉）
 %%   compact   較緊湊的行距（1.35 倍，預設 1.6 倍）
+%%   english   介面文字（方塊標題、目錄、日期…）改成英文
 %%   其他選項會傳給 article
 %% ---------------------------------------------------------------------
 \newif\ifmorandi@dark     \morandi@darkfalse
 \newif\ifmorandi@print    \morandi@printfalse
 \newif\ifmorandi@bionic   \morandi@bionictrue
 \newif\ifmorandi@compact  \morandi@compactfalse
+\newif\ifmorandi@english  \morandi@englishfalse
 
 \DeclareOption{dark}{\morandi@darktrue}
 \DeclareOption{print}{\morandi@printtrue}
 \DeclareOption{bionic}{\morandi@bionictrue}
 \DeclareOption{nobionic}{\morandi@bionicfalse}
 \DeclareOption{compact}{\morandi@compacttrue}
+\DeclareOption{english}{\morandi@englishtrue}
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
 
@@ -151,7 +154,10 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{0.75em plus 0.2em minus 0.1em}
 \xeCJKsetup{CJKecglue={\hskip 0.25em plus 0.08em}}
+% 完全靠左、右側自由參差：不斷字時英文長單字也不會超出邊界
+\setlength{\RaggedRightRightskip}{0pt plus 1fil}
 \AtBeginDocument{\RaggedRight}
+\setlength{\emergencystretch}{3em}
 \hyphenpenalty=10000
 \exhyphenpenalty=10000
 \widowpenalty=10000
@@ -216,13 +222,14 @@
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand\headrulewidth{0pt}
-\fancyhead[L]{\small\color{TextSoft}\leftmark}
+\fancyhead[L]{\small\color{TextSoft}\rightmark}
 \fancyhead[R]{\small\color{TextSoft}\@title}
 \fancyfoot[C]{\morandi@progressbar\\[2pt]
   \small\color{TextSoft}\thepage\ /\ \pageref*{LastPage}}
 \fancypagestyle{plain}{\fancyhf{}\fancyfoot[C]{\morandi@progressbar\\[2pt]
   \small\color{TextSoft}\thepage\ /\ \pageref*{LastPage}}}
-\renewcommand\sectionmark[1]{\markboth{\thesection\quad #1}{}}
+% 頁首顯示「本頁開頭所在的章節」，而不是本頁最後一個章節
+\renewcommand\sectionmark[1]{\markboth{\thesection\quad #1}{\thesection\quad #1}}
 \setlength{\headheight}{16pt}
 
 %% ---------------------------------------------------------------------
@@ -244,7 +251,7 @@
     \vspace{0.8em}
     {\small\color{TextSoft}\@author
      \ifx\@date\@empty\else\quad|\quad\@date\fi
-     \ifx\morandi@readingtime\@empty\else\quad|\quad 預估閱讀：\morandi@readingtime\fi\par}
+     \ifx\morandi@readingtime\@empty\else\quad|\quad \readingtimename\morandi@titlesep\morandi@readingtime\fi\par}
   \end{tcolorbox}
   \vspace{0.5em}}
 
@@ -277,18 +284,10 @@
     colback=#2!\morandi@boxmix!BoxBgMix,
     borderline west={3pt}{0pt}{#2},
     boxed title style={colback=#2},
-    title={#3\if\relax\detokenize{##1}\relax\else：##1\fi},
+    title={#3\if\relax\detokenize{##1}\relax\else\morandi@titlesep##1\fi},
     top=12pt}}
 
-\newcommand\tldrname{一句話摘要}
-\newcommand\goalsname{本節目標}
-\newcommand\keypointname{重點}
-\newcommand\definitionname{定義}
-\newcommand\examplename{範例}
-\newcommand\tipname{小提示}
-\newcommand\warningname{注意}
-\newcommand\questionname{想一想}
-\newcommand\summaryname{本節回顧}
+% 方塊標題文字在檔案最後依語言設定（見「介面語言」）
 
 \morandi@newbox{keypoint}  {MorandiRose} {\keypointname}
 \morandi@newbox{definition}{MorandiBlue} {\definitionname}
@@ -399,7 +398,6 @@
 %% 分段休息 Break points
 %%   長內容之間插入「休息點」，提醒讀者可以停一下、喝口水。
 %% ---------------------------------------------------------------------
-\newcommand\breakname{休息一下，再繼續}
 \newcommand\takeabreak[1][\breakname]{%
   \par\vspace{1.2em}%
   \begin{center}
@@ -422,13 +420,42 @@
 \newcommand\headerrow{\rowcolor{MorandiBlue!35!PageBg}}
 
 %% ---------------------------------------------------------------------
-%% 目錄標題 & 其他中文化
+%% 介面語言 Interface language
+%%   預設繁體中文；加上 english 選項則全部改成英文。
+%%   也可以在導言區用 \renewcommand\keypointname{...} 個別覆寫。
 %% ---------------------------------------------------------------------
-\renewcommand\contentsname{目錄}
-\renewcommand\figurename{圖}
-\renewcommand\tablename{表}
-\renewcommand\refname{參考資料}
-\renewcommand\abstractname{摘要}
-\renewcommand\today{\the\year 年 \the\month 月 \the\day 日}
+\ifmorandi@english
+  \newcommand\tldrname{TL;DR}
+  \newcommand\goalsname{Goals}
+  \newcommand\keypointname{Key Point}
+  \newcommand\definitionname{Definition}
+  \newcommand\examplename{Example}
+  \newcommand\tipname{Tip}
+  \newcommand\warningname{Caution}
+  \newcommand\questionname{Think About It}
+  \newcommand\summaryname{Recap}
+  \newcommand\breakname{Take a short break, then keep going}
+  \newcommand\readingtimename{Reading time}
+  \newcommand\morandi@titlesep{:\space}
+\else
+  \newcommand\tldrname{一句話摘要}
+  \newcommand\goalsname{本節目標}
+  \newcommand\keypointname{重點}
+  \newcommand\definitionname{定義}
+  \newcommand\examplename{範例}
+  \newcommand\tipname{小提示}
+  \newcommand\warningname{注意}
+  \newcommand\questionname{想一想}
+  \newcommand\summaryname{本節回顧}
+  \newcommand\breakname{休息一下，再繼續}
+  \newcommand\readingtimename{預估閱讀}
+  \newcommand\morandi@titlesep{：}
+  \renewcommand\contentsname{目錄}
+  \renewcommand\figurename{圖}
+  \renewcommand\tablename{表}
+  \renewcommand\refname{參考資料}
+  \renewcommand\abstractname{摘要}
+  \renewcommand\today{\the\year 年 \the\month 月 \the\day 日}
+\fi
 
 \endinput

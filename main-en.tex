@@ -1,0 +1,142 @@
+% =====================================================================
+%  Example: Morandi x ADHD-friendly LaTeX template (English)
+%  Build: latexmk main-en.tex   (uses XeLaTeX via .latexmkrc)
+%
+%  Class options (inside \documentclass[...]):
+%    english   English interface labels (box titles, contents, date)
+%    dark      dark, eye-friendly mode
+%    print     white background for printing
+%    compact   tighter line spacing
+%    nobionic  turn off the \bionic reading guide
+% =====================================================================
+\documentclass[english]{morandi-adhd}
+
+\title{Morandi ADHD-Friendly Notes Template}
+\subtitle{Calm colours, clear chunks, and key points you can spot at a glance}
+\author{Your Name}
+\date{\today}
+\readingtime{about 5 minutes}
+
+\begin{document}
+
+\maketitle
+
+\begin{tldr}
+  This template uses \key{soft Morandi colours} to reduce visual fatigue, and
+  \key{consistent colour meanings} plus \key{short paragraphs} to help you stay focused.
+\end{tldr}
+
+\tableofcontents
+
+\section{Why ADHD-Friendly Layout?}
+
+\begin{goals}
+  \begin{checklist}
+    \item Understand the design principles behind this template
+    \item Know what each coloured box means
+    \item Start writing your own notes with it
+  \end{checklist}
+\end{goals}
+
+For readers whose attention drifts easily, \hl{a dense wall of text} is often abandoned after
+three lines. This template breaks a document into \key{small chunks}, each with its own clear
+colour and title.
+
+\begin{keypoint}
+  One paragraph, one idea. Short paragraphs and generous white space make it easy to
+  read one chunk, pause, and move on to the next.
+\end{keypoint}
+
+\subsection{Design Principles}
+
+\begin{itemize}
+  \item \key{Muted colours}: Morandi tones are greyed down, so they never compete for attention.
+  \item \key{Off-white page, dark grey text}: gentler than pure black on pure white.
+  \item \key{Generous line spacing, left-aligned}: no uneven word gaps, fewer skipped lines.
+  \item \key{Reading progress bar}: the green bar in the footer shows how much is left.
+    \begin{itemize}
+      \item Knowing where the finish line is makes long documents less daunting.
+    \end{itemize}
+\end{itemize}
+
+\takeabreak
+
+\section{Colour Meanings at a Glance}
+
+Every box type always uses the same colour, so after a while your brain recognises it
+automatically instead of re-reading the label each time.
+
+\begin{definition}[Morandi colours]
+  Named after the Italian painter Giorgio Morandi, whose still lifes use colours mixed with
+  grey, giving low-saturation, calm tones.
+\end{definition}
+
+\begin{example}
+  \begin{steps}
+    \item Open \texttt{main-en.tex}
+    \item Replace the title and author with your own
+    \item Build with \texttt{latexmk main-en.tex}
+  \end{steps}
+\end{example}
+
+\begin{tip}
+  Use \verb|\key{...}| for key terms, \verb|\hl{...}| as a highlighter, and \verb|\soft{...}|
+  for side notes \soft{(like this one)}.
+\end{tip}
+
+\begin{warning}
+  This template must be compiled with \key{XeLaTeX}; pdfLaTeX cannot load the system fonts.
+\end{warning}
+
+\begin{question}
+  Without scrolling back: what does a \emph{green} box stand for?
+\end{question}
+
+\subsection{Tables}
+
+\begin{center}
+  \zebra
+  \begin{tabular}{lll}
+    \toprule
+    \headerrow \textbf{Environment} & \textbf{Colour} & \textbf{Purpose} \\
+    \midrule
+    \texttt{keypoint}   & Dusty rose  & Key point      \\
+    \texttt{definition} & Haze blue   & Definition     \\
+    \texttt{example}    & Sage green  & Example        \\
+    \texttt{tip}        & Milk-tea sand & Tip          \\
+    \texttt{warning}    & Clay red    & Caution        \\
+    \texttt{question}   & Grey mauve  & Think about it \\
+    \bottomrule
+  \end{tabular}
+\end{center}
+
+\chunkbreak
+
+\subsection{Reading Guide}
+
+Wrap a paragraph in \verb|\bionic{...}| and the first two letters of every third word are
+set in bold, giving your eyes regular anchor points as they move along the line:
+
+\bionic{Reading long paragraphs can be exhausting when attention keeps drifting away from the page. Small visual anchors spaced evenly along each line give the eyes somewhere to land, which makes it easier to keep your place and carry on reading.}
+
+\soft{Adjust the pattern with \texttt{\textbackslash bionicsetup\{every=3, letters=2\}}.}
+
+\takeabreak[Nice work! Just one section to go]
+
+\section{Maths Works Too}
+
+Inline maths such as $E = mc^2$, or displayed equations:
+\[
+  \int_0^1 x^2 \, dx = \frac{1}{3}
+\]
+
+\begin{summary}
+  \begin{checklist}
+    \done Colours tell you what kind of information you are reading
+    \done Short paragraphs with plenty of white space
+    \done A progress bar to keep long documents manageable
+    \item Start writing your own notes!
+  \end{checklist}
+\end{summary}
+
+\end{document}
